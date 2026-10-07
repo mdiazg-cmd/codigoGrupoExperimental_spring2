@@ -1,0 +1,11 @@
+Grupo 5 - Sprint 2 - Plataforma de solicitudes de soporte
+
+Requisitos: Python 3 y Flask  ->  pip install flask
+Si tienes un soporte.db del sprint 1 puedes borrarlo (o dejarlo, se actualiza solo).
+Ejecutar:   python app.py   (abre http://127.0.0.1:5000)
+Pruebas:    python pruebas_sprint1.py   y   python pruebas_sprint2.py
+
+Usuarios de prueba (ficticios), clave de todos: Clave123*
+  solicitante1, solicitante2, agente1, agente2, agente3 (inactivo), coord1, auditor1
+
+Cambio controlado 1: la prioridad Alta pide justificacion y fecha objetivo.

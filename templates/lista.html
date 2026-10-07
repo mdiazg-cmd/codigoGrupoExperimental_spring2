@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% block contenido %}
+<h2>Solicitudes</h2>
+<p>Ordenar por:
+  <a href="?orden=prioridad">prioridad</a> |
+  <a href="?orden=estado">estado</a> |
+  <a href="?orden=fecha">fecha</a></p>
+<table>
+<tr><th>ID</th><th>Título</th><th>Categoría</th><th>Estado</th><th>Prioridad</th><th>Agente</th><th>Últ. actualización</th></tr>
+{% for s in filas %}
+<tr>
+  <td>{{ s.id }}</td>
+  <td><a href="{{ url_for('detalle', id=s.id) }}">{{ s.titulo }}</a></td>
+  <td>{{ s.categoria }}</td><td>{{ s.estado }}</td><td>{{ s.prioridad }}</td>
+  <td>{{ s.agente or '-' }}</td><td>{{ s.actualizada }}</td>
+</tr>
+{% else %}
+<tr><td colspan="7">No hay solicitudes</td></tr>
+{% endfor %}
+</table>
+{% endblock %}

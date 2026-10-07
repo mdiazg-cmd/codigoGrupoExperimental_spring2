@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block contenido %}
+<h2>Solicitud #{{ s.id }}: {{ s.titulo }}</h2>
+<p><b>Descripción:</b> {{ s.descripcion }}</p>
+<p><b>Categoría:</b> {{ s.categoria }} | <b>Estado:</b> {{ s.estado }} | <b>Prioridad:</b> {{ s.prioridad }}</p>
+{% if s.prioridad == 'Alta' %}
+<p><b>Justificación:</b> {{ s.justificacion }} | <b>Fecha objetivo:</b> {{ s.fecha_objetivo }}</p>
+{% endif %}
+<p><b>Propietario:</b> {{ s.usuario }} | <b>Agente:</b> {{ s.agente or 'Sin asignar' }} |
+   <b>Creada:</b> {{ s.fecha }} | <b>Última actualización:</b> {{ s.actualizada }}</p>
+
+{% if session.rol == 'coordinador' %}
+<div class="caja">
+<h3>Cambiar prioridad</h3>
+<form method="post" action="{{ url_for('priorizar', id=s.id) }}">
+  <select name="prioridad">
+    {% for p in prioridades %}<option {% if p == s.prioridad %}selected{% endif %}>{{ p }}</option>{% endfor %}
+  </select>
+  <input name="justificacion" placeholder="Justificación (obligatoria si es Alta)">
+  <input name="fecha_objetivo" placeholder="Fecha objetivo AAAA-MM-DD (obligatoria si es Alta)">
+  <button type="submit">Guardar</button>
+</form>
+</div>
+<div class="caja">
+<h3>Asignar a un agente</h3>
+<form method="post" action="{{ url_for('asignar', id=s.id) }}">
+  <select name="agente_id">
+    {% for a in agentes %}<option value="{{ a.id }}">{{ a.usuario }}</option>{% endfor %}
+  </select>
+  <button type="submit">Asignar</button>
+</form>
+</div>
+{% endif %}
+
+{% if session.rol == 'agente' %}
+<div class="caja">
+<h3>Cambiar estado</h3>
+{% if siguientes %}
+<form method="post" action="{{ url_for('cambiar_estado', id=s.id) }}">
+  <select name="estado">{% for n in siguientes %}<option>{{ n }}</option>{% endfor %}</select>
+  <button type="submit">Cambiar</button>
+</form>
+{% else %}<p>No hay cambios de estado disponibles.</p>{% endif %}
+</div>
+<div class="caja">
+<h3>Nuevo comentario</h3>
+<form method="post" action="{{ url_for('comentar', id=s.id) }}">
+  <textarea name="texto" rows="3"></textarea>
+  <button type="submit">Comentar</button>
+</form>
+</div>
+{% endif %}
+
+{% if session.rol == 'solicitante' and s.estado == 'Resuelta' %}
+<div class="caja">
+<h3>La solicitud fue resuelta</h3>
+<form method="post" action="{{ url_for('confirmar', id=s.id) }}"><button type="submit">Confirmar solución</button></form>
+<form method="post" action="{{ url_for('reabrir', id=s.id) }}">
+  <input name="motivo" placeholder="Motivo de reapertura">
+  <button type="submit">Reabrir</button>
+</form>
+</div>
+{% endif %}
+
+<h3>Comentarios</h3>
+{% for c in coments %}
+<div class="caja"><b>{{ c.usuario }}</b> - {{ c.fecha }} ({{ c.tipo }})<br>{{ c.texto }}</div>
+{% else %}<p>Sin comentarios</p>{% endfor %}
+
+<h3>Historial de cambios</h3>
+<table>
+<tr><th>Fecha</th><th>Usuario</th><th>Campo</th><th>Anterior</th><th>Nuevo</th></tr>
+{% for h in hist %}
+<tr><td>{{ h.fecha }}</td><td>{{ h.usuario }}</td><td>{{ h.campo }}</td><td>{{ h.valor_anterior }}</td><td>{{ h.valor_nuevo }}</td></tr>
+{% else %}
+<tr><td colspan="5">Sin cambios</td></tr>
+{% endfor %}
+</table>
+<p><a href="{{ url_for('lista') }}">Volver</a></p>
+{% endblock %}

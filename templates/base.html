@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Soporte - Grupo 5</title>
+<style>
+body{font-family:Arial,sans-serif;max-width:900px;margin:20px auto;padding:0 10px}
+nav{background:#2c3e50;padding:10px;margin-bottom:15px}
+nav a{color:#fff;margin-right:15px;text-decoration:none}
+table{border-collapse:collapse;width:100%}
+th,td{border:1px solid #ccc;padding:6px;text-align:left}
+th{background:#ecf0f1}
+.msg{background:#fff3cd;padding:8px;margin-bottom:10px}
+.caja{border:1px solid #ddd;padding:8px;margin:8px 0}
+input,select,textarea{width:100%;padding:5px;margin-bottom:8px;box-sizing:border-box}
+button{padding:6px 14px}
+</style>
+</head>
+<body>
+{% if session.usuario_id %}
+<nav>
+  <a href="{{ url_for('inicio') }}">Inicio</a>
+  {% if session.rol == 'solicitante' %}<a href="{{ url_for('nueva') }}">Nueva solicitud</a>{% endif %}
+  {% if session.rol in ['solicitante','agente','coordinador'] %}<a href="{{ url_for('lista') }}">Solicitudes</a>{% endif %}
+  <a href="{{ url_for('logout') }}">Cerrar sesión ({{ session.usuario }})</a>
+</nav>
+{% endif %}
+{% for m in get_flashed_messages() %}<div class="msg">{{ m }}</div>{% endfor %}
+{% block contenido %}{% endblock %}
+</body>
+</html>

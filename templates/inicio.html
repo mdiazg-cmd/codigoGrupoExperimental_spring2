@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block contenido %}
+<h2>Bienvenido, {{ session.usuario }}</h2>
+<p>Rol: <b>{{ session.rol }}</b></p>
+{% if notis %}
+<h3>Notificaciones</h3>
+<ul>{% for n in notis %}<li>{{ n.fecha }} - {{ n.mensaje }}</li>{% endfor %}</ul>
+{% endif %}
+{% endblock %}

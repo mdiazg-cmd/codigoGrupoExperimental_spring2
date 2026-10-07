@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block contenido %}
+<h2>Nueva solicitud</h2>
+<form method="post">
+  <label>Título</label><input name="titulo">
+  <label>Descripción</label><textarea name="descripcion" rows="4"></textarea>
+  <label>Categoría</label>
+  <select name="categoria">
+    <option value="">-- seleccione --</option>
+    {% for c in categorias %}<option>{{ c }}</option>{% endfor %}
+  </select>
+  <button type="submit">Crear</button>
+</form>
+{% endblock %}
